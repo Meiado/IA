@@ -97,7 +97,9 @@ class PuzzleGUI:
             return
 
         busca = self.opcao_busca.get()
-        nivel = int(self.opcao_nivel.get())
+        nivel = None
+        if busca not in ["BFS (Cega)"]:
+            nivel = int(self.opcao_nivel.get())
 
         inicio = time.time()
 
@@ -119,11 +121,12 @@ class PuzzleGUI:
             tempo_execucao = fim - inicio
             movimentos = len(caminho) - 1
 
-            # Registrar log
+            # log
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
             with open(f"logs/log_busca_{timestamp}.log", "w") as f:
                 f.write(f"Busca: {busca}\n")
-                f.write(f"Heurística nível: {nivel}\n")
+                if nivel != None:
+                    f.write(f"Heurística nível: {nivel}\n")
                 f.write(f"Tempo de execução: {tempo_execucao:.4f} segundos\n")
                 f.write(f"Movimentos até a solução: {movimentos}\n")
                 f.write("\nPassos da solução:\n")
@@ -132,7 +135,7 @@ class PuzzleGUI:
                         f.write(" ".join(str(n) if n != 0 else " " for n in linha) + "\n")
                     f.write("\n")
 
-            messagebox.showinfo("Sucesso", f"Solução encontrada em {movimentos} movimentos. Tempo: {tempo_execucao:.2f}s\nLog salvo com sucesso.")
+            messagebox.showinfo("Sucesso", f"Solução encontrada em {movimentos} movimentos.\nTempo: {tempo_execucao:.2f}s.")
         else:
             messagebox.showerror("Falha", "Nenhuma solução encontrada!")
 
