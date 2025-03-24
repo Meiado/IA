@@ -3,9 +3,12 @@ from tkinter import messagebox, ttk
 from puzzle import Puzzle
 from buscas import busca_em_largura, a_star, best_first
 from heuristicas import pecas_fora_do_lugar, distancia_manhattan
+
 import time
 import datetime
+import os
 
+os.makedirs("logs", exist_ok=True)
 class PuzzleGUI:
     def __init__(self, master):
         self.master = master
@@ -118,7 +121,7 @@ class PuzzleGUI:
 
             # Registrar log
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
-            with open(f"log_busca_{timestamp}.log", "w") as f:
+            with open(f"logs/log_busca_{timestamp}.log", "w") as f:
                 f.write(f"Busca: {busca}\n")
                 f.write(f"Heurística nível: {nivel}\n")
                 f.write(f"Tempo de execução: {tempo_execucao:.4f} segundos\n")
