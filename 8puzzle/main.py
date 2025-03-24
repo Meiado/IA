@@ -52,6 +52,9 @@ class PuzzleGUI:
         self.texto_estado = tk.Text(self.frame, height=5, width=20, font=('Arial', 14))
         self.texto_estado.grid(row=2, column=0, columnspan=5)
 
+        self.opcao_busca.bind("<<ComboboxSelected>>", self.atualizar_interface)
+        self.atualizar_interface()
+
         self.embaralhar()
 
     def mostrar_estado(self, estado):
@@ -147,6 +150,13 @@ class PuzzleGUI:
                 if plano[i] > plano[j]:
                     inversoes += 1
         return inversoes % 2 == 0
+    
+    def atualizar_interface(self, event=None):
+        if self.opcao_busca.get() == "BFS (Cega)":
+            self.opcao_nivel.config(state='disabled')
+        else:
+            self.opcao_nivel.config(state='readonly')
+
 
 if __name__ == '__main__':
     root = tk.Tk()
