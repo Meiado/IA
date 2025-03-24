@@ -1,5 +1,10 @@
 def pecas_fora_do_lugar(atual, final):
-    return sum(atual[i][j] != final[i][j] and atual[i][j] != 0 for i in range(3) for j in range(3))
+    contador = 0
+    for i in range(3):
+        for j in range(3):
+            if atual[i][j] != final[i][j] and atual[i][j] != 0:
+                contador += 1
+    return contador
 
 
 def distancia_manhattan(atual, final):

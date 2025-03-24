@@ -2,13 +2,14 @@ from collections import deque
 import heapq
 import copy
 
+from collections import deque
+
 def busca_em_largura(estado_inicial, estado_final):
-    visitados = set()
     fila = deque([(estado_inicial, [])])
+    visitados = set()
 
     while fila:
         estado_atual, caminho = fila.popleft()
-
         if tuple(map(tuple, estado_atual)) in visitados:
             continue
 
@@ -25,10 +26,10 @@ def busca_em_largura(estado_inicial, estado_final):
 
 def a_star(estado_inicial, estado_final, heuristica, nivel=1):
     visitados = set()
-    heap = [(heuristica(estado_inicial, estado_final), estado_inicial, [])]
+    fila = [(heuristica(estado_inicial, estado_final), estado_inicial, [])]
 
-    while heap:
-        _, estado_atual, caminho = heapq.heappop(heap)
+    while fila:
+        _, estado_atual, caminho = heapq.heappop(fila)
 
         if tuple(map(tuple, estado_atual)) in visitados:
             continue
@@ -39,25 +40,22 @@ def a_star(estado_inicial, estado_final, heuristica, nivel=1):
             return caminho + [estado_atual]
 
         for proximo_estado in gerar_sucessores(estado_atual):
-            custo = len(caminho) + 1
-
             if nivel == 2:
                 sucessores_proximo = gerar_sucessores(proximo_estado)
-                custo += min([heuristica(s, estado_final) for s in sucessores_proximo])
+                custo = len(caminho) + 1 + min([heuristica(s, estado_final) for s in sucessores_proximo])
             else:
-                custo += heuristica(proximo_estado, estado_final)
+                custo = len(caminho) + 1 + heuristica(proximo_estado, estado_final)
 
-            heapq.heappush(heap, (custo, proximo_estado, caminho + [estado_atual]))
+            heapq.heappush(fila, (custo, proximo_estado, caminho + [estado_atual]))
 
     return None
 
-
 def best_first(estado_inicial, estado_final, heuristica, nivel=1):
     visitados = set()
-    heap = [(heuristica(estado_inicial, estado_final), estado_inicial, [])]
+    fila = [(heuristica(estado_inicial, estado_final), estado_inicial, [])]
 
-    while heap:
-        _, estado_atual, caminho = heapq.heappop(heap)
+    while fila:
+        _, estado_atual, caminho = heapq.heappop(fila)
 
         if tuple(map(tuple, estado_atual)) in visitados:
             continue
@@ -74,7 +72,7 @@ def best_first(estado_inicial, estado_final, heuristica, nivel=1):
             else:
                 custo = heuristica(proximo_estado, estado_final)
 
-            heapq.heappush(heap, (custo, proximo_estado, caminho + [estado_atual]))
+            heapq.heappush(fila, (custo, proximo_estado, caminho + [estado_atual]))
 
     return None
 
