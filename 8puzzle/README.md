@@ -39,4 +39,4 @@ Para **rodar o projeto**, basta executar o arquivo `main.py`, que abrirá a inte
 
 ```bash
 python main.py
-````
+```
