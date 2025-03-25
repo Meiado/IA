@@ -78,16 +78,21 @@ def best_first(estado_inicial, estado_final, heuristica, nivel=1):
 
 
 def gerar_sucessores(estado):
-    direcoes = [(0,1), (1,0), (-1,0), (0,-1)]
+    vazio = None
+    for i in range(3):
+        for j in range(3):
+            if estado[i][j] == 0:
+                vazio = (i, j)
+                break
+        if vazio:
+            break
+    direcoes = [(0, 1), (1, 0), (-1, 0), (0, -1)]
     sucessores = []
-
-    vazio = [(ix, iy) for ix, row in enumerate(estado) for iy, i in enumerate(row) if i == 0][0]
-
     for dx, dy in direcoes:
-        nx, ny = vazio[0] + dx, vazio[1] + dy
-        if 0 <= nx <= 2 and 0 <= ny <= 2:
-            novo_estado = copy.deepcopy(estado)
-            novo_estado[vazio[0]][vazio[1]], novo_estado[nx][ny] = novo_estado[nx][ny], novo_estado[vazio[0]][vazio[1]]
+        nova_pos = (vazio[0] + dx, vazio[1] + dy)
+        if 0 <= nova_pos[0] < 3 and 0 <= nova_pos[1] < 3:
+            novo_estado = [linha.copy() for linha in estado]
+            novo_estado[vazio[0]][vazio[1]], novo_estado[nova_pos[0]][nova_pos[1]] = novo_estado[nova_pos[0]][nova_pos[1]], novo_estado[vazio[0]][vazio[1]]
             sucessores.append(novo_estado)
-
+    
     return sucessores

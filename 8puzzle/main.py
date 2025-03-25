@@ -9,6 +9,7 @@ import datetime
 import os
 
 os.makedirs("logs", exist_ok=True)
+
 class PuzzleGUI:
     def __init__(self, master):
         self.master = master
@@ -21,10 +22,6 @@ class PuzzleGUI:
 
         self.botao_embaralhar = tk.Button(self.frame, text="Embaralhar", command=self.embaralhar)
         self.botao_embaralhar.grid(row=0, column=0)
-
-        self.opcao_puzzle = ttk.Combobox(self.frame, values=["Custom: Embaralhado", "Fácil", "Médio", "Difícil"])
-        self.opcao_puzzle.current(0)
-        self.opcao_puzzle.grid(row=0, column=1)
 
         self.opcao_busca = ttk.Combobox(
             self.frame,
@@ -69,29 +66,7 @@ class PuzzleGUI:
             time.sleep(0.5)
 
     def embaralhar(self):
-        escolha = self.opcao_puzzle.get()
-
-        if escolha == "Fácil":
-            self.puzzle.estado_inicial = [
-                [1, 2, 3],
-                [4, 5, 6],
-                [0, 7, 8]
-            ]
-        elif escolha == "Médio":
-            self.puzzle.estado_inicial = [
-                [1, 2, 3],
-                [5, 0, 6],
-                [4, 7, 8]
-            ]
-        elif escolha == "Difícil":
-            self.puzzle.estado_inicial = [
-                [6, 4, 7],
-                [8, 5, 0],
-                [3, 2, 1]
-            ]
-        else:
-            self.puzzle.estado_inicial = self.puzzle.gerar_embaralhado()
-
+        self.puzzle.estado_inicial = self.puzzle.gerar_embaralhado()
         self.mostrar_estado(self.puzzle.estado_inicial)
 
     def resolver(self):
@@ -121,7 +96,7 @@ class PuzzleGUI:
 
         if caminho:
             self.mostrar_solucao(caminho)
-            tempo_execucao = fim - inicio
+            tempo_execucao = (fim - inicio) * 1000
             movimentos = len(caminho) - 1
 
             # log
@@ -130,7 +105,7 @@ class PuzzleGUI:
                 f.write(f"Busca: {busca}\n")
                 if nivel != None:
                     f.write(f"Heurística nível: {nivel}\n")
-                f.write(f"Tempo de execução: {tempo_execucao:.4f} segundos\n")
+                f.write(f"Tempo de execução: {tempo_execucao:.4f} ms\n")
                 f.write(f"Movimentos até a solução: {movimentos}\n")
                 f.write("\nPassos da solução:\n")
                 for estado in caminho:
@@ -138,7 +113,7 @@ class PuzzleGUI:
                         f.write(" ".join(str(n) if n != 0 else " " for n in linha) + "\n")
                     f.write("\n")
 
-            messagebox.showinfo("Sucesso", f"Solução encontrada em {movimentos} movimentos.\nTempo: {tempo_execucao:.2f}s.")
+            messagebox.showinfo("Sucesso", f"Solução encontrada em {movimentos} movimentos.\nTempo: {tempo_execucao:.2f} ms.")
         else:
             messagebox.showerror("Falha", "Nenhuma solução encontrada!")
 
